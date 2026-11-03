@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>chen.sketches</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #e9e8e4;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #1a1a1a;
+    }
+
+    .paper-texture {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.28;
+      mix-blend-mode: multiply;
+    }
+
+    .horizontal-deck {
+      display: flex;
+      flex-direction: row;
+      width: 100vw;
+      height: 100vh;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .horizontal-deck::-webkit-scrollbar {
+      display: none;
+    }
+
+    .slide {
+      flex: 0 0 100vw;
+      width: 100vw;
+      height: 100vh;
+      scroll-snap-align: center;
+      scroll-snap-stop: always;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem 2rem;
+      position: relative;
+    }
+
+    .handwriting-container {
+      position: relative;
+      max-width: 85vw;
+      max-height: 75vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .handwriting-img {
+      max-width: 100%;
+      max-height: 75vh;
+      object-fit: contain;
+      mix-blend-mode: multiply;
+      filter: contrast(112%);
+      display: block;
+    }
+
+    .ink-hotspot {
+      position: absolute;
+      display: block;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+      z-index: 50;
+      text-decoration: none;
+    }
+
+    .ink-hotspot:hover {
+      background-color: rgba(0, 51, 204, 0.08);
+      outline: 1px dashed rgba(0, 51, 204, 0.3);
+    }
+
+    .hotspot-144beds {
+      top: 18%;
+      left: 45%;
+      width: 30%;
+      height: 22%;
+    }
+
+    .hotspot-fridge {
+      top: 3%;
+      left: 35%;
+      width: 25%;
+      height: 12%;
+    }
+
+    .hotspot-insta {
+      bottom: 28%;
+      left: 10%;
+      width: 12%;
+      height: 14%;
+    }
+
+    .media-container {
+      width: 90vw;
+      max-width: 1000px;
+      max-height: 80vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .single-photo {
+      max-width: 100%;
+      max-height: 75vh;
+      object-fit: contain;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+      border-radius: 2px;
+    }
+
+    .photo-trio {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      max-height: 70vh;
+    }
+
+    .photo-trio img {
+      flex: 1;
+      width: 33.33%;
+      max-height: 65vh;
+      object-fit: cover;
+      border-radius: 2px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    }
+
+    @media (max-width: 768px) {
+      .photo-trio {
+        flex-direction: column;
+        max-height: 80vh;
+        gap: 8px;
+      }
+
+      .photo-trio img {
+        width: 100%;
+        height: 22vh;
+        object-fit: cover;
+      }
+    }
+
+    .indicator-bar {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 200;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .dot.active {
+      background: #0033cc;
+      transform: scale(1.5);
+    }
+  </style>
+</head>
+<body>
+
+  <svg class="paper-texture">
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" />
+      <feColorMatrix type="saturate" values="0" />
+    </filter>
+    <rect width="100%" height="100%" filter="url(#grain)" />
+  </svg>
+
+  <div class="horizontal-deck" id="deck">
+
+    <section class="slide">
+      <div class="handwriting-container">
+        <img src="img/slide1.png" alt="Handwritten Intro" class="handwriting-img">
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="handwriting-container">
+        <img src="img/slide2.png" alt="WG-Gesucht Critique" class="handwriting-img">
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="handwriting-container">
+        <img src="img/slide3.png" alt="144 Iterations of Temporary Beds" class="handwriting-img">
+        <a href="https://olivachen.github.io/144-iterations/" target="_blank" rel="noopener noreferrer" class="ink-hotspot hotspot-144beds" title="Open 144 Iterations Project"></a>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="media-container">
+        <img src="img/image.png" alt="144 Temporary Beds Web Scraping Code" class="single-photo">
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="handwriting-container">
+        <img src="img/slide4.png" alt="Gemeinschaftskühlschrank Intro" class="handwriting-img">
+        <a href="https://olivachen.github.io/shared-refrigerator/" target="_blank" rel="noopener noreferrer" class="ink-hotspot hotspot-fridge" title="Open Gemeinschaftskühlschrank Project"></a>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="media-container">
+        <div class="photo-trio">
+          <img src="img/image1.png" alt="Gemeinschaftskühlschrank Galopprennbahn Exterior">
+          <img src="img/image2.png" alt="Open Public Refrigerator Setup">
+          <img src="img/image3.png" alt="Shared Fridge Usage">
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="handwriting-container">
+        <img src="img/slide5.png" alt="Shopping NLP Project Statement 1" class="handwriting-img">
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="handwriting-container">
+        <img src="img/slide6.png" alt="Shopping NLP Project Statement 2" class="handwriting-img">
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="handwriting-container">
+        <img src="img/slide7.png" alt="Datenschutz & Closing Notes" class="handwriting-img">
+        <a href="https://instagram.com/chen.sketches" target="_blank" rel="noopener noreferrer" class="ink-hotspot hotspot-insta" title="Instagram: @chen.sketches"></a>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="indicator-bar" id="indicatorBar">
+    <div class="dot active" data-index="0"></div>
+    <div class="dot" data-index="1"></div>
+    <div class="dot" data-index="2"></div>
+    <div class="dot" data-index="3"></div>
+    <div class="dot" data-index="4"></div>
+    <div class="dot" data-index="5"></div>
+    <div class="dot" data-index="6"></div>
+    <div class="dot" data-index="7"></div>
+    <div class="dot" data-index="8"></div>
+  </div>
+
+  <script>
+    const deck = document.getElementById('deck');
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+
+    deck.addEventListener('wheel', (e) => {
+      if (e.deltaY !== 0) {
+        e.preventDefault();
+        deck.scrollLeft += e.deltaY;
+      }
+    }, { passive: false });
+
+    deck.addEventListener('scroll', () => {
+      const scrollPos = deck.scrollLeft;
+      const slideWidth = window.innerWidth;
+      const activeIndex = Math.round(scrollPos / slideWidth);
+
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === activeIndex);
+      });
+    });
+
+    dots.forEach(dot => {
+      dot.addEventListener('click', (e) => {
+        const index = parseInt(e.target.getAttribute('data-index'));
+        slides[index].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+      });
+    });
+
+    deck.addEventListener('click', (e) => {
+      if (e.target.classList.contains('dot') || e.target.classList.contains('ink-hotspot')) return;
+      const currentScroll = deck.scrollLeft;
+      const slideWidth = window.innerWidth;
+      const currentIndex = Math.round(currentScroll / slideWidth);
+
+      if (currentIndex < slides.length - 1) {
+        slides[currentIndex + 1].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+      } else {
+        slides[0].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      const currentScroll = deck.scrollLeft;
+      const slideWidth = window.innerWidth;
+      const currentIndex = Math.round(currentScroll / slideWidth);
+
+      if ((e.key === 'ArrowRight' || e.key === 'ArrowDown') && currentIndex < slides.length - 1) {
+        slides[currentIndex + 1].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+      } else if ((e.key === 'ArrowLeft' || e.key === 'ArrowUp') && currentIndex > 0) {
+        slides[currentIndex - 1].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+      }
+    });
+  </script>
+</body>
+</html>
